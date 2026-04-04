@@ -1,0 +1,380 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CTABanner from '../components/CTABanner.astro';
+import { proyectos, getImages } from '../data/proyectos.js';
+---
+
+<Layout
+  title="Proyectos | Assetec"
+  description="Conoce los proyectos realizados por Assetec en Ingeniería Eléctrica, Arquitectura y Obras Civiles."
+>
+  <!-- HERO -->
+  <section class="page-hero">
+    <div class="hero-bg">
+      <img
+        src="/images/hero.jpg"
+        alt="Proyectos Assetec"
+        class="hero-img"
+        loading="eager"
+      />
+      <div class="hero-overlay"></div>
+      <div class="hero-grid"></div>
+    </div>
+    <div class="container hero-content">
+      <span class="section-label hero-label">Nuestro Trabajo</span>
+      <h1 class="page-title">Proyectos</h1>
+      <p class="page-subtitle">Soluciones eléctricas y civiles para el sector público y privado</p>
+    </div>
+  </section>
+
+  <!-- LISTADO DE PROYECTOS -->
+  <section class="proyectos-section">
+    <div class="container">
+      <div class="proyectos-grid" id="proyectosGrid">
+        {
+          proyectos.map((p, i) => {
+            const images = getImages(p.folder);
+            const mainImg = images.length > 0 ? images[0] : '/images/hero.jpg';
+            const isHidden = i >= 9;
+            return (
+              <a 
+                href={`/proyectos/${p.slug}`} 
+                class={`proyecto-card ${isHidden ? 'hidden-card' : ''}`} 
+                style={!isHidden ? `animation-delay: ${(i % 9) * 0.1}s` : ''}
+              >
+                <div class="proyecto-cover">
+                  <img src={mainImg} alt={p.titulo} loading="lazy" class="cover-img" />
+                  <div class="cover-overlay">
+                    <span class="view-btn">Ver Detalles</span>
+                  </div>
+                </div>
+                <div class="proyecto-body">
+                  <div class="proyecto-header-info">
+                    <span class="proyecto-categoria">{p.categoria}</span>
+                    <span class="proyecto-fecha">{p.fecha}</span>
+                  </div>
+                  <h3 class="proyecto-titulo">{p.titulo}</h3>
+                  <span class="proyecto-cliente">
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                    >
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </svg>
+                    {p.cliente} | {p.ubicacion}
+                  </span>
+                </div>
+                <div class="card-accent-line" />
+              </a>
+            );
+          })
+        }
+      </div>
+
+      {proyectos.length > 9 && (
+        <div class="load-more-container">
+          <button id="loadMoreBtn" class="btn primary-btn">Cargar Más Proyectos</button>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <CTABanner />
+</Layout>
+
+<script>
+  const loadMoreBtn = document.getElementById('loadMoreBtn');
+  const hiddenCards = document.querySelectorAll('.hidden-card');
+
+  if (loadMoreBtn && hiddenCards.length > 0) {
+    loadMoreBtn.addEventListener('click', () => {
+      hiddenCards.forEach((card, i) => {
+        card.classList.remove('hidden-card');
+        // Reset delay for the newly revealed batch
+        card.style.animationDelay = `${(i % 3) * 0.15}s`;
+        card.style.animation = 'none'; // reset
+        card.offsetHeight; /* trigger reflow */
+        card.style.animation = null; 
+        card.classList.add('animate-reveal');
+      });
+      loadMoreBtn.style.opacity = '0';
+      setTimeout(() => loadMoreBtn.style.display = 'none', 300);
+    });
+  }
+</script>
+
+<style>
+  /* ── HERO ── */
+  .page-hero {
+    position: relative;
+    min-height: 52vh;
+    display: flex;
+    align-items: center;
+    padding-top: var(--nav-height);
+    overflow: hidden;
+    background: var(--color-blue-dark);
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+  }
+  .hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: kenburns 30s ease infinite alternate;
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background:
+      radial-gradient(ellipse 80% 60% at 75% 50%, rgba(42, 82, 152, 0.2) 0%, transparent 60%),
+      linear-gradient(
+        to right,
+        var(--color-blue-dark) 0%,
+        var(--color-blue-base) 40%,
+        rgba(11, 24, 41, 0.6) 80%,
+        transparent 100%
+      );
+  }
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 80%);
+  }
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    animation: fadeInUp 0.8s ease both;
+  }
+  .hero-label {
+    color: var(--color-primary) !important;
+  }
+  .page-title {
+    font-size: clamp(3.5rem, 8vw, 6rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--color-white);
+    margin-bottom: 20px;
+  }
+  .page-subtitle {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 600px;
+  }
+  @keyframes kenburns {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
+  }
+
+  /* ── GRID DE PROYECTOS ── */
+  .proyectos-section {
+    padding: var(--section-padding);
+    background: var(--color-dark);
+    min-height: 80vh;
+  }
+  .proyectos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+
+  .hidden-card {
+    display: none !important;
+  }
+  .animate-reveal {
+    animation: fadeInUp 0.6s ease both !important;
+  }
+
+  .proyecto-card {
+    position: relative;
+    background: var(--color-dark-3);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: var(--transition);
+    animation: fadeInUp 0.6s ease both;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .proyecto-card:hover {
+    border-color: rgba(232, 180, 0, 0.4);
+    transform: translateY(-8px);
+    box-shadow: 0 32px 60px rgba(0, 0, 0, 0.5);
+  }
+
+  /* COVER (IMAGEN) */
+  .proyecto-cover {
+    height: 240px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s ease;
+  }
+  .proyecto-card:hover .cover-img {
+    transform: scale(1.08);
+  }
+
+  .cover-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 17, 36, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.4s ease;
+  }
+  .proyecto-card:hover .cover-overlay {
+    opacity: 1;
+    backdrop-filter: blur(2px);
+  }
+  .view-btn {
+    font-family: var(--font-heading);
+    color: #000;
+    background: var(--color-primary);
+    padding: 10px 24px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transform: translateY(20px);
+    transition: transform 0.4s ease;
+  }
+  .proyecto-card:hover .view-btn {
+    transform: translateY(0);
+  }
+
+  .proyecto-header-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .proyecto-categoria {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    background: rgba(232, 180, 0, 0.1);
+    border: 1px solid rgba(232, 180, 0, 0.2);
+    padding: 6px 14px;
+    border-radius: 100px;
+  }
+
+  .proyecto-fecha {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.4);
+    font-weight: 500;
+  }
+
+  .proyecto-body {
+    padding: 24px 32px 32px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .proyecto-titulo {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--color-white);
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+    transition: color 0.3s ease;
+  }
+  .proyecto-card:hover .proyecto-titulo {
+    color: var(--color-primary);
+  }
+
+  .proyecto-cliente {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 0;
+  }
+
+  .card-accent-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-primary), #ff9900);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+  }
+  .proyecto-card:hover .card-accent-line {
+    opacity: 1;
+  }
+
+  /* Botón Cargar Más */
+  .load-more-container {
+    text-align: center;
+    margin-top: 60px;
+  }
+  .btn {
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .primary-btn {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: var(--color-primary);
+    color: var(--color-dark);
+    padding: 16px 40px;
+    border-radius: 100px;
+    font-size: 0.9rem;
+    box-shadow: 0 8px 24px rgba(232, 180, 0, 0.25);
+  }
+  .primary-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(232, 180, 0, 0.4);
+    background: #ffcc00; /* un poco más brillante */
+  }
+
+  @media (max-width: 1024px) {
+    .proyectos-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 640px) {
+    .proyectos-grid {
+      grid-template-columns: 1fr;
+    }
+    .proyecto-body {
+      padding: 24px;
+    }
+  }
+</style>

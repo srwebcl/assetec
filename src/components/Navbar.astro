@@ -1,0 +1,182 @@
+---
+const navLinks = [
+  { href: '/', label: 'Inicio' },
+  { href: '/nosotros', label: 'Nosotros' },
+  { href: '/ingenieria-electrica', label: 'Ingeniería Eléctrica' },
+  {
+    href: '/arquitectura-obras-civiles',
+    label: 'Arquitectura & Obras Civiles',
+  },
+  { href: '/proyectos', label: 'Proyectos' },
+  { href: '/contacto', label: 'Contacto' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="navbar" id="navbar">
+  <div class="container nav-inner">
+    <a href="/" class="nav-logo">
+      <img src="/images/Logo-Assetec.webp" alt="Assetec" width="200" height="64" />
+    </a>
+
+    <nav class="nav-links" id="nav-links">
+      {
+        navLinks.map((link) => (
+          <a href={link.href} class={`nav-link ${currentPath === link.href ? 'active' : ''}`}>
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <button class="hamburger" id="hamburger" aria-label="Menú">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<style>
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    height: var(--nav-height);
+    /* ACTUALIZADO: Azul corporativo con opacidad para el efecto blur */
+    background: rgba(8, 17, 31, 0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border);
+    transition: var(--transition);
+  }
+  .navbar.scrolled {
+    /* ACTUALIZADO: Un tono azul más oscuro y opaco al hacer scroll */
+    background: rgba(11, 24, 41, 0.98);
+    /* ACTUALIZADO: Sombra adaptada a los tonos azules */
+    box-shadow: 0 4px 30px rgba(8, 17, 31, 0.5);
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+  }
+  .nav-logo img {
+    height: 64px;
+    width: auto;
+    filter: brightness(1.05);
+    transition: var(--transition);
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .nav-link {
+    padding: 8px 14px;
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.75);
+    border-radius: var(--radius);
+    transition: var(--transition);
+    position: relative;
+  }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: var(--color-primary);
+    transition: width 0.3s ease;
+  }
+  .nav-link:hover,
+  .nav-link.active {
+    color: var(--color-white);
+  }
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    width: 60%;
+  }
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+  }
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--color-white);
+    border-radius: 2px;
+    transition: var(--transition);
+  }
+
+  @media (max-width: 960px) {
+    .nav-logo img {
+      height: 50px;
+    }
+    .hamburger {
+      display: flex;
+    }
+    .nav-links {
+      display: none;
+      position: absolute;
+      top: var(--nav-height);
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      /* ACTUALIZADO: Fondo del menú móvil en azul oscuro corporativo */
+      background: rgba(8, 17, 31, 0.98);
+      border-bottom: 1px solid var(--color-border);
+      padding: 16px 0;
+      gap: 0;
+    }
+    .nav-links.open {
+      display: flex;
+    }
+    .nav-link {
+      width: 100%;
+      text-align: center;
+      padding: 14px 24px;
+      border-radius: 0;
+    }
+    .nav-link::after {
+      display: none;
+    }
+    .nav-link:hover {
+      /* ACTUALIZADO: Hover state en el menú móvil para que no sea un gris genérico */
+      background: rgba(42, 82, 152, 0.15);
+    }
+  }
+</style>
+
+<script>
+  const navbar = document.getElementById('navbar');
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('nav-links');
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 30) {
+      navbar?.classList.add('scrolled');
+    } else {
+      navbar?.classList.remove('scrolled');
+    }
+  });
+
+  hamburger?.addEventListener('click', () => {
+    navLinks?.classList.toggle('open');
+  });
+</script>

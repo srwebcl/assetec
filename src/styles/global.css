@@ -1,0 +1,368 @@
+/* ===========================
+   ASSETEC - Global Styles (Corregido: Cero Negros, Azul Marino Visible)
+   =========================== */
+
+/* 1. Importamos la fuente SIN los pesos 800 y 900 para optimizar carga y forzar estilos más ligeros */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  /* 🔥 DORADO ELÉCTRICO CORPORATIVO 🔥 */
+  --color-primary: #ffcc00;
+  --color-primary-dark: #e6a200;
+
+  /* 🌊 Paleta de Azules Estricta (CORREGIDA: Cero negros o grises) 🌊 */
+  /* 🔥 ACLARADO: Antes era #08111f, ahora es un azul marino que sí se ve azul 🔥 */
+  --color-blue-dark: #1a2c4e;
+  --color-blue-base: #0b1829;
+  --color-blue-light: #0f2040;
+  --color-blue-deep: #0a1530;
+  --color-blue-accent: #2a5298;
+
+  /* Fondos claros */
+  --color-white: #ffffff;
+  --color-off-white: #f4f6f9;
+  /* Blanco con un sutil tono azulado frío */
+
+  /* Textos oscuros - Forzados a Azul Marino en vez de grises */
+  --color-text-main: #0a1530;
+  --color-text-light: #1c2b45;
+
+  /* INVERSIÓN DE COLORES PARA MODO CLARO */
+  --color-dark: var(--color-white);
+  --color-dark-2: var(--color-off-white);
+  --color-dark-3: var(--color-blue-light);
+  --color-dark-4: var(--color-blue-deep);
+
+  --color-border: rgba(42, 82, 152, 0.25);
+
+  --font-heading: 'Montserrat', sans-serif;
+  --font-body: 'Open Sans', sans-serif;
+  --nav-height: 80px;
+  --section-padding: 100px 0;
+  --container-max: 1200px;
+  --radius: 4px;
+  --transition: all 0.3s ease;
+
+  --shadow: 0 10px 40px rgba(8, 17, 31, 0.12);
+  /* Sombra azulada */
+  --shadow-gold: 0 8px 32px rgba(255, 204, 0, 0.3);
+  /* Sombra dorado eléctrico */
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-white);
+  color: var(--color-text-light);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition);
+}
+
+ul {
+  list-style: none;
+}
+
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ===========================
+   BOTONES
+   =========================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border-radius: var(--radius);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  transition: var(--transition);
+}
+
+.btn-primary {
+  /* Gradiente dorado para dar volumen */
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  color: var(--color-blue-dark);
+  /* Texto en el azul marino aclarado */
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-gold);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--color-white);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.btn-outline:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+section:not(.page-hero):not(.hero):not(.cta-banner) .btn-outline {
+  color: var(--color-blue-dark) !important;
+  border-color: var(--color-blue-accent) !important;
+}
+
+section:not(.page-hero):not(.hero):not(.cta-banner) .btn-outline:hover {
+  color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+}
+
+/* ===========================
+   TÍTULOS, ETIQUETAS Y PESOS TIPOGRÁFICOS
+   =========================== */
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-primary-dark);
+  margin-bottom: 16px;
+}
+
+.section-label::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--color-primary-dark);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 600 !important;
+  line-height: 1.2;
+}
+
+.hero-title,
+.page-title,
+.about-title,
+.services-title,
+.cta-title,
+.nf-title,
+.nf-code,
+.sd-number,
+.stat-number,
+.historia-text h2,
+.equipo-header h2,
+.contact-info h2 {
+  font-weight: 700 !important;
+}
+
+/* ===========================
+   FORZAR TEXTOS AZULES EN SECCIONES BLANCAS
+   =========================== */
+.about-title,
+.services-title,
+.historia-text h2,
+.equipo-header h2,
+.sd-header h2,
+.contact-info h2,
+.nf-title {
+  color: var(--color-blue-dark) !important;
+  /* 🔥 Ahora sí se verá azul 🔥 */
+}
+
+.about-text,
+.historia-text p,
+.contact-info > p,
+.info-value,
+.nf-text {
+  color: var(--color-text-light) !important;
+}
+
+.about-text strong,
+.historia-text strong,
+.info-label,
+.form-group label {
+  color: var(--color-blue-accent) !important;
+}
+
+.nf-code {
+  color: rgba(42, 82, 152, 0.1) !important;
+}
+
+/* ===========================
+   TARJETAS Y FONDOS AZULES
+   =========================== */
+.service-card,
+.team-card,
+.proyecto-card,
+.sd-card,
+.testimonial-card,
+.contact-form-wrap,
+.value-item {
+  background: linear-gradient(145deg, var(--color-blue-light), var(--color-blue-deep)) !important;
+  border: 1px solid var(--color-border) !important;
+}
+
+.service-card h3,
+.team-card h3,
+.proyecto-card h3,
+.sd-card h3,
+.value-label {
+  color: var(--color-white) !important;
+}
+
+.service-card p,
+.team-card p,
+.proyecto-card p,
+.sd-card p,
+.team-quote,
+.testimonial-text {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  background: var(--color-blue-deep) !important;
+  /* Fondo azul profundo */
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-white) !important;
+}
+
+/* ===========================
+   BARRA DE NAVEGACIÓN Y HERO
+   =========================== */
+.navbar {
+  /* 🔥 ACTUALIZADO: Fondo en Azul Marino Aclarado 🔥 */
+  background: rgba(26, 44, 78, 0.95) !important;
+  border-bottom: 1px solid var(--color-border) !important;
+}
+
+.navbar.scrolled {
+  /* 🔥 ACTUALIZADO: Fondo en Azul Marino Aclarado 🔥 */
+  background: rgba(26, 44, 78, 0.98) !important;
+  box-shadow: 0 4px 30px rgba(26, 44, 78, 0.5) !important;
+}
+
+.hero-overlay {
+  background:
+    radial-gradient(ellipse 80% 60% at 70% 50%, rgba(255, 204, 0, 0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 20% 80%, rgba(42, 82, 152, 0.2) 0%, transparent 50%),
+    linear-gradient(
+      135deg,
+      var(--color-blue-dark) 0%,
+      var(--color-blue-base) 50%,
+      var(--color-blue-deep) 100%
+    ) !important;
+}
+
+.page-hero-bg,
+.cta-bg {
+  background: radial-gradient(
+    ellipse 60% 80% at 50% 50%,
+    rgba(42, 82, 152, 0.25) 0%,
+    transparent 60%
+  ) !important;
+}
+
+/* ===========================
+   ANIMACIONES
+   =========================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes pulse-gold {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 204, 0, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 0 12px rgba(255, 204, 0, 0);
+  }
+}
+
+/* ===========================
+   SCROLLBAR
+   =========================== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-off-white);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 4px;
+}

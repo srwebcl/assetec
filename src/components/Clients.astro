@@ -1,0 +1,308 @@
+---
+const clients = [
+  {
+    src: '/images/CLIENTES-CAPEL.webp',
+    alt: 'CAPEL',
+  },
+  {
+    src: '/images/CLIENTES-TPC.webp',
+    alt: 'TPC',
+  },
+  {
+    src: '/images/CLIENTES-SEC.webp',
+    alt: 'SEC',
+  },
+  {
+    src: '/images/CLIENTES-MERCADOPUBLICO.webp',
+    alt: 'Mercado Público',
+  },
+  {
+    src: '/images/CLIENTES-MUNI-LA-SERENA.webp',
+    alt: 'Municipalidad La Serena',
+  },
+  {
+    src: '/images/CLIENTES-MUNI-CALDERA.webp',
+    alt: 'Municipalidad Caldera',
+  },
+  {
+    src: '/images/CLIENTES-MUNI-COQUIMBO.webp',
+    alt: 'Municipalidad Coquimbo',
+  },
+  {
+    src: '/images/CLIENTES-CGE.webp',
+    alt: 'CGE',
+  },
+];
+
+const testimonials = [
+  {
+    quote:
+      '"Queremos ser un aporte en el desarrollo de proyectos y aplicar nuestros conocimientos en materias de energías renovables de última generación, con especial atención en el cuidado del medio ambiente."',
+    name: 'Matías Barraza',
+    role: 'Director Ejecutivo & Socio Fundador, ASSETEC',
+  },
+  {
+    quote:
+      '"Atendemos a todos nuestros clientes con gran profesionalismo y seguridad. Ofreciendo soluciones simples, seguras, amigables con el medio ambiente y con alto valor agregado."',
+    name: 'Nicolás Barraza',
+    role: 'Jefe de Control & Aseguramiento de Calidad, ASSETEC',
+  },
+];
+---
+
+<section class="clients">
+  <div class="container">
+    <div class="clients-header">
+      <h2 class="clients-title">Nuestros Clientes nos Avalan</h2>
+
+      <div class="header-separator">
+        <div class="separator-line"></div>
+        <img
+          src="/images/assetec-favicon.webp"
+          alt="Assetec Favicon"
+          class="separator-icon"
+          width="28"
+          height="28"
+          loading="lazy"
+        />
+        <div class="separator-line"></div>
+      </div>
+    </div>
+
+    <div class="clients-marquee-wrap">
+      <div class="clients-marquee">
+        <div class="clients-track">
+          {
+            clients.map((c) => (
+              <div class="client-logo">
+                <img src={c.src} alt={c.alt} loading="lazy" />
+              </div>
+            ))
+          }
+          {
+            clients.map((c) => (
+              <div class="client-logo" aria-hidden="true">
+                <img src={c.src} alt={c.alt} loading="lazy" />
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonials-grid">
+      {
+        testimonials.map((t, i) => (
+          <blockquote class="testimonial-card" style={`animation-delay: ${i * 0.2}s`}>
+            <div class="quote-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+              </svg>
+            </div>
+            <p class="testimonial-text">{t.quote}</p>
+            <footer class="testimonial-author">
+              <div class="author-avatar">{t.name.charAt(0)}</div>
+              <div>
+                <strong class="author-name">{t.name}</strong>
+                <span class="author-role">{t.role}</span>
+              </div>
+            </footer>
+          </blockquote>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .clients {
+    padding: var(--section-padding);
+    background: var(--color-white);
+    position: relative;
+  }
+
+  /* --- HEADER CENTRADO UNIFICADO --- */
+  .clients-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 64px;
+  }
+
+  .clients-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700 !important;
+    color: var(--color-blue-dark) !important;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+
+  .header-separator {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    max-width: 240px;
+    margin-top: 8px;
+  }
+
+  .separator-line {
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+    opacity: 0.6;
+  }
+
+  .separator-icon {
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  }
+
+  /* Carrusel */
+  .clients-marquee-wrap {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 100px;
+    padding: 20px 0;
+  }
+
+  .clients-marquee-wrap::before,
+  .clients-marquee-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 150px;
+    z-index: 2;
+  }
+  .clients-marquee-wrap::before {
+    left: 0;
+    background: linear-gradient(to right, var(--color-white), transparent);
+  }
+  .clients-marquee-wrap::after {
+    right: 0;
+    background: linear-gradient(to left, var(--color-white), transparent);
+  }
+
+  .clients-track {
+    display: flex;
+    gap: 80px;
+    align-items: center;
+    width: max-content;
+    animation: marquee 35s linear infinite;
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .client-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+  }
+
+  .client-logo:hover {
+    transform: translateY(-5px);
+  }
+
+  .client-logo img {
+    height: 60px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  /* Testimonios */
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  .testimonial-card {
+    background: linear-gradient(145deg, var(--color-blue-light), var(--color-blue-deep)) !important;
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    padding: 48px;
+    transition: var(--transition);
+    animation: fadeInUp 0.7s ease both;
+  }
+
+  .testimonial-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow);
+  }
+
+  .quote-icon {
+    color: var(--color-primary);
+    opacity: 0.8;
+    margin-bottom: 24px;
+  }
+
+  .testimonial-text {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8) !important;
+    line-height: 1.8;
+    font-style: italic;
+    margin-bottom: 32px;
+  }
+
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .author-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--color-blue-dark);
+  }
+
+  .author-name {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-white) !important;
+  }
+
+  .author-role {
+    display: block;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5) !important;
+    margin-top: 2px;
+  }
+
+  @media (max-width: 768px) {
+    .testimonials-grid {
+      grid-template-columns: 1fr;
+    }
+    .client-logo img {
+      height: 45px;
+    }
+    .clients-track {
+      gap: 50px;
+    }
+    .clients-title {
+      font-size: 1.8rem;
+    }
+  }
+</style>

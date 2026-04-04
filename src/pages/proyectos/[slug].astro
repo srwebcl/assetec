@@ -1,0 +1,400 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import CTABanner from '../../components/CTABanner.astro';
+import { proyectos, getImages } from '../../data/proyectos.js';
+
+export function getStaticPaths() {
+  return proyectos.map((proyecto) => {
+    return {
+      params: { slug: proyecto.slug },
+      props: { proyecto },
+    };
+  });
+}
+
+const { proyecto } = Astro.props;
+const images = getImages(proyecto.folder);
+const mainImage = images.length > 0 ? images[0] : '/images/hero.jpg';
+const galleryImages = images.slice(1);
+---
+
+<Layout title={`${proyecto.titulo} | Assetec Proyectos`} description={proyecto.descripcion}>
+  <!-- HERO DEL PROYECTO -->
+  <section class="project-hero">
+    <div class="hero-bg">
+      <img
+        src={mainImage}
+        alt={proyecto.titulo}
+        class="hero-img"
+        loading="eager"
+      />
+      <div class="hero-overlay"></div>
+      <div class="hero-grid"></div>
+    </div>
+    <div class="container hero-content">
+      <div class="hero-top-links">
+        <a href="/proyectos" class="back-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          Volver a Proyectos
+        </a>
+      </div>
+      <span class="project-category">{proyecto.categoria}</span>
+      <h1 class="project-title">{proyecto.titulo}</h1>
+    </div>
+  </section>
+
+  <!-- DETALLES DEL PROYECTO -->
+  <section class="project-details">
+    <div class="container project-grid">
+      <!-- Sidebar Info -->
+      <aside class="project-sidebar">
+        <div class="info-card">
+          <div class="info-item">
+            <span class="info-label">Cliente</span>
+            <span class="info-value">{proyecto.cliente}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Ubicación</span>
+            <span class="info-value">{proyecto.ubicacion}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Fecha de Ejecución</span>
+            <span class="info-value">{proyecto.fecha}</span>
+          </div>
+          <div class="info-item tags-item">
+            <span class="info-label">Especialidades</span>
+            <div class="tags-list">
+              {proyecto.tags.map((tag) => (
+                <span class="tag">{tag}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="project-main">
+        <h2 class="section-title">Acerca del Proyecto</h2>
+        <p class="project-desc">{proyecto.descripcion}</p>
+
+        {images.length > 0 && (
+          <div class="project-slider-section">
+            <h3 class="slider-title">Galería del Proyecto</h3>
+            
+            <div class="slider-container">
+              <button class="slider-btn prev-btn" aria-label="Anterior foto">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M15 18l-6-6 6-6" />
+                </svg>
+              </button>
+              
+              <div class="slider-track" id="galleryTrack">
+                {images.map((img, index) => (
+                  <div class="slider-item">
+                    <img src={img} alt={`${proyecto.titulo} - Imagen ${index + 1}`} loading="lazy" />
+                  </div>
+                ))}
+              </div>
+
+              <button class="slider-btn next-btn" aria-label="Siguiente foto">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 18l6-6-6-6" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
+      </main>
+    </div>
+  </section>
+
+  <CTABanner />
+</Layout>
+
+<script>
+  const track = document.getElementById('galleryTrack');
+  const prevBtn = document.querySelector('.prev-btn');
+  const nextBtn = document.querySelector('.next-btn');
+
+  if (track && prevBtn && nextBtn) {
+    prevBtn.addEventListener('click', () => {
+      // Scroll by the width of the container minus a small offset
+      track.scrollBy({ left: -track.clientWidth + 40, behavior: 'smooth' });
+    });
+
+    nextBtn.addEventListener('click', () => {
+      track.scrollBy({ left: track.clientWidth - 40, behavior: 'smooth' });
+    });
+    
+    // Auto-hide buttons if scroll isn't needed (only 1 image)
+    const checkButtons = () => {
+      if (track.scrollWidth <= track.clientWidth) {
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
+      }
+    };
+    window.addEventListener('load', checkButtons);
+    window.addEventListener('resize', checkButtons);
+  }
+</script>
+
+<style>
+  /* FONDO Y HEROS */
+  .project-hero {
+    position: relative;
+    min-height: 55vh;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 60px;
+    background: var(--color-blue-dark); /* Color corregido */
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+  }
+  .hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: linear-gradient(to top, var(--color-blue-dark) 0%, rgba(26, 44, 78, 0.6) 50%, rgba(26, 44, 78, 0.3) 100%);
+  }
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 80%);
+  }
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    animation: fadeInUp 0.8s ease both;
+  }
+  .hero-top-links {
+    width: 100%;
+    margin-bottom: 24px;
+  }
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(255,255,255,0.6);
+    transition: var(--transition);
+  }
+  .back-link:hover {
+    color: var(--color-primary);
+    transform: translateX(-4px);
+  }
+  .project-category {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin-bottom: 12px;
+  }
+  .project-title {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--color-white);
+    max-width: 900px;
+  }
+
+  /* DETAILS SECTION */
+  .project-details {
+    padding: 80px 0;
+    background: var(--color-blue-dark); /* Color de alto contraste asegurado */
+  }
+  .project-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  /* SIDEBAR */
+  .info-card {
+    background: var(--color-blue-deep);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    padding: 32px;
+    position: sticky;
+    top: calc(var(--nav-height) + 40px);
+    box-shadow: var(--shadow);
+  }
+  .info-item {
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .info-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+  .info-label {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 8px;
+  }
+  .info-value {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-white) !important;
+    line-height: 1.4;
+  }
+  .tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .tag {
+    font-family: var(--font-heading);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    background: rgba(232, 180, 0, 0.1);
+    border: 1px solid rgba(232, 180, 0, 0.2);
+    padding: 6px 12px;
+    border-radius: 100px;
+  }
+
+  /* MAIN CONTENT */
+  .section-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--color-white) !important;
+    margin-bottom: 24px;
+  }
+  .project-desc {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.7) !important;
+    line-height: 1.8;
+    margin-bottom: 64px;
+  }
+
+  /* SLIDER NATIVO MEJORADO CON FLECHAS */
+  .slider-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--color-primary) !important;
+    margin-bottom: 24px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  
+  .slider-container {
+    width: 100%;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    background: var(--color-primary);
+    color: var(--color-blue-dark);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 20;
+    transition: var(--transition);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+  .slider-btn:hover {
+    background: #ffdb4d;
+    transform: translateY(-50%) scale(1.1);
+  }
+  .prev-btn { left: 16px; }
+  .next-btn { right: 16px; }
+  
+  .slider-track {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    /* Hide scrollbar entirely for cleaner look since we have arrows */
+    scrollbar-width: none;
+  }
+  .slider-track::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .slider-item {
+    flex: 0 0 calc(100% - 32px); /* Un poco menos del 100% para que se asome la siguiente foto */
+    scroll-snap-align: center;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60vh;
+    min-height: 400px;
+    max-height: 700px;
+  }
+
+  .slider-item:first-child { margin-left: 16px; }
+  .slider-item:last-child { margin-right: 16px; }
+  
+  .slider-item img {
+    /* Mantenemos proporción original sin marco negro */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Fuerza al navegador a respetar la orientación original del metadato EXIF */
+    image-orientation: from-image;
+  }
+
+  @media (max-width: 960px) {
+    .project-grid {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+    .info-card {
+      position: static;
+    }
+    .slider-item {
+      height: 45vh;
+      min-height: 300px;
+    }
+  }
+</style>
